@@ -67,14 +67,33 @@ curl -i http://localhost:8080/users/user1/bucket
 mvn test
 ```
 
+## Project structure
+
+Single Maven module, organized by layer:
+
+```
+com.example.ratelimiter
+├── model/        # immutable domain records: Bucket, RateLimiter, AllowResult
+├── service/      # RateLimiterService (interface), RateLimiterOps (pure core)
+│   └── impl/     # RateLimiterServiceImpl (@Service, holds global state)
+├── controller/   # RateLimiterController (REST endpoints)
+├── dto/          # request/response DTOs
+├── exception/    # UnknownUserException + GlobalExceptionHandler
+├── util/         # TimeUtil (server-now timestamp)
+└── config/       # RateLimiterProperties (@ConfigurationProperties)
+```
+
+The pure algorithm (`service/RateLimiterOps`) has no Spring dependencies and is
+tested in isolation; the Spring layer only orchestrates and holds state.
+
 ## Design decisions & trade-offs
 
-- **Pure functional core.** The algorithm lives in `core/RateLimiterOps` as
-  pure static functions over immutable `record`s (`Bucket`, `RateLimiter`,
-  `AllowResult`). `allowRequest` returns `[allowed, newState]` and never
-  mutates its input. The core has zero Spring dependencies and is unit-tested
-  in isolation.
-- **State swapping.** `RateLimiterService` holds the current limiter in an
+- **Pure functional core.** The algorithm lives in `service/RateLimiterOps` as
+  pure static functions over immutable `record`s (`model/Bucket`,
+  `model/RateLimiter`, `model/AllowResult`). `allowRequest` returns
+  `[allowed, newState]` and never mutates its input. The core has zero Spring
+  dependencies and is unit-tested in isolation.
+- **State swapping.** `RateLimiterServiceImpl` holds the current limiter in an
   `AtomicReference` and swaps in the new state returned by the core after each
   request. Single-threaded execution is assumed, per the brief.
 - **Immutability cost.** Each `allowRequest` copies the bucket map
