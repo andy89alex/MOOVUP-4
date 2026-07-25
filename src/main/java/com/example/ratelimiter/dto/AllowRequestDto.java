@@ -1,4 +1,4 @@
-package com.example.ratelimiter.api.dto;
+package com.example.ratelimiter.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;

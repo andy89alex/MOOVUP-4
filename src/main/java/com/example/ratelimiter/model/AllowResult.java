@@ -1,4 +1,4 @@
-package com.example.ratelimiter.core;
+package com.example.ratelimiter.model;
 
 public record AllowResult(boolean allowed, RateLimiter newState) {
 }

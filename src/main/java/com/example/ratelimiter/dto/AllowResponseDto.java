@@ -1,4 +1,4 @@
-package com.example.ratelimiter.api.dto;
+package com.example.ratelimiter.dto;
 
 public record AllowResponseDto(boolean allowed, BucketStateDto bucket) {
 }

@@ -1,4 +1,4 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

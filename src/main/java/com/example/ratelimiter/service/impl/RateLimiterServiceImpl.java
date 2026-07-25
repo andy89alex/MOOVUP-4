@@ -1,10 +1,11 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.service.impl;
 
 import com.example.ratelimiter.config.RateLimiterProperties;
-import com.example.ratelimiter.core.AllowResult;
-import com.example.ratelimiter.core.Bucket;
-import com.example.ratelimiter.core.RateLimiter;
-import com.example.ratelimiter.core.RateLimiterOps;
+import com.example.ratelimiter.model.AllowResult;
+import com.example.ratelimiter.model.Bucket;
+import com.example.ratelimiter.model.RateLimiter;
+import com.example.ratelimiter.service.RateLimiterOps;
+import com.example.ratelimiter.service.RateLimiterService;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicReference;

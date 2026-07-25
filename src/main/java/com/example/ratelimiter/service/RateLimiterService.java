@@ -1,7 +1,7 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.service;
 
-import com.example.ratelimiter.core.AllowResult;
-import com.example.ratelimiter.core.Bucket;
+import com.example.ratelimiter.model.AllowResult;
+import com.example.ratelimiter.model.Bucket;
 
 public interface RateLimiterService {
     AllowResult allowRequest(String userId, double timestamp);

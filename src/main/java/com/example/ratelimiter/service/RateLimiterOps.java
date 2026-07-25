@@ -1,4 +1,8 @@
-package com.example.ratelimiter.core;
+package com.example.ratelimiter.service;
+
+import com.example.ratelimiter.model.AllowResult;
+import com.example.ratelimiter.model.Bucket;
+import com.example.ratelimiter.model.RateLimiter;
 
 import java.util.Map;
 

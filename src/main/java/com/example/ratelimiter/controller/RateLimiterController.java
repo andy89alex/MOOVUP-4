@@ -1,10 +1,12 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.controller;
 
-import com.example.ratelimiter.api.dto.AllowRequestDto;
-import com.example.ratelimiter.api.dto.AllowResponseDto;
-import com.example.ratelimiter.api.dto.BucketStateDto;
-import com.example.ratelimiter.core.AllowResult;
-import com.example.ratelimiter.core.Bucket;
+import com.example.ratelimiter.dto.AllowRequestDto;
+import com.example.ratelimiter.dto.AllowResponseDto;
+import com.example.ratelimiter.dto.BucketStateDto;
+import com.example.ratelimiter.exception.UnknownUserException;
+import com.example.ratelimiter.model.AllowResult;
+import com.example.ratelimiter.model.Bucket;
+import com.example.ratelimiter.service.RateLimiterService;
 import com.example.ratelimiter.util.TimeUtil;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
