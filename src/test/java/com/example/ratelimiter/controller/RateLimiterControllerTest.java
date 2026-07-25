@@ -1,4 +1,4 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

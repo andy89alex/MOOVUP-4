@@ -1,5 +1,7 @@
-package com.example.ratelimiter.core;
+package com.example.ratelimiter.service;
 
+import com.example.ratelimiter.model.Bucket;
+import com.example.ratelimiter.model.RateLimiter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

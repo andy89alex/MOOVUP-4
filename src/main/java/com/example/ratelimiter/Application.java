@@ -5,6 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+/**
+ * @author Andi Hermanto
+ * @since 2026-07-25
+ */
 @SpringBootApplication
 @EnableConfigurationProperties(RateLimiterProperties.class)
 public class Application {

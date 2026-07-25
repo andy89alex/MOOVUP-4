@@ -1,4 +1,4 @@
-package com.example.ratelimiter.api;
+package com.example.ratelimiter.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
+/**
+ * @author Andi Hermanto
+ * @since 2026-07-25
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
