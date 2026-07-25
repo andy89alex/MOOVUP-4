@@ -1,0 +1,44 @@
+package com.example.ratelimiter.api;
+
+import com.example.ratelimiter.api.dto.AllowRequestDto;
+import com.example.ratelimiter.api.dto.AllowResponseDto;
+import com.example.ratelimiter.api.dto.BucketStateDto;
+import com.example.ratelimiter.core.AllowResult;
+import com.example.ratelimiter.core.Bucket;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class RateLimiterController {
+
+    private final RateLimiterService service;
+
+    public RateLimiterController(RateLimiterService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/requests")
+    public ResponseEntity<AllowResponseDto> checkRequest(@Valid @RequestBody AllowRequestDto request) {
+        double timestamp = request.getTimestamp() != null
+                ? request.getTimestamp()
+                : System.currentTimeMillis() / 1000.0;
+
+        AllowResult result = service.allowRequest(request.getUserId(), timestamp);
+        BucketStateDto bucket = BucketStateDto.from(result.newState().buckets().get(request.getUserId()));
+        AllowResponseDto body = new AllowResponseDto(result.allowed(), bucket);
+
+        HttpStatus status = result.allowed() ? HttpStatus.OK : HttpStatus.TOO_MANY_REQUESTS;
+        return ResponseEntity.status(status).body(body);
+    }
+
+    @GetMapping("/users/{userId}/bucket")
+    public BucketStateDto getBucket(@PathVariable String userId) {
+        Bucket bucket = service.getBucketState(userId);
+        if (bucket == null) {
+            throw new UnknownUserException(userId);
+        }
+        return BucketStateDto.from(bucket);
+    }
+}
