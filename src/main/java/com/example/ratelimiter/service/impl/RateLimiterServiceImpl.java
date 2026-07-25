@@ -6,6 +6,8 @@ import com.example.ratelimiter.model.Bucket;
 import com.example.ratelimiter.model.RateLimiter;
 import com.example.ratelimiter.service.RateLimiterOps;
 import com.example.ratelimiter.service.RateLimiterService;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,11 +24,14 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class RateLimiterServiceImpl implements RateLimiterService {
 
-    private final AtomicReference<RateLimiter> state;
+    @Autowired
+    private RateLimiterProperties props;
 
-    public RateLimiterServiceImpl(RateLimiterProperties props) {
-        this.state = new AtomicReference<>(
-                RateLimiterOps.createRateLimiter(props.getCapacity(), props.getLeakRate()));
+    private final AtomicReference<RateLimiter> state = new AtomicReference<>();
+
+    @PostConstruct
+    void init() {
+        state.set(RateLimiterOps.createRateLimiter(props.getCapacity(), props.getLeakRate()));
     }
 
     @Override

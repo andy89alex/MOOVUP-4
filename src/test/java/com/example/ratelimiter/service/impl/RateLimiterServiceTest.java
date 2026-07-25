@@ -4,6 +4,7 @@ import com.example.ratelimiter.config.RateLimiterProperties;
 import com.example.ratelimiter.model.AllowResult;
 import com.example.ratelimiter.service.RateLimiterService;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +14,11 @@ class RateLimiterServiceTest {
         RateLimiterProperties props = new RateLimiterProperties();
         props.setCapacity(capacity);
         props.setLeakRate(leakRate);
-        return new RateLimiterServiceImpl(props);
+        // Field-injected bean: inject props, then run the @PostConstruct initializer.
+        RateLimiterServiceImpl service = new RateLimiterServiceImpl();
+        ReflectionTestUtils.setField(service, "props", props);
+        service.init();
+        return service;
     }
 
     @Test
