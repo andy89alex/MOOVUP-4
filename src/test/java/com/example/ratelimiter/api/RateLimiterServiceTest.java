@@ -12,7 +12,7 @@ class RateLimiterServiceTest {
         RateLimiterProperties props = new RateLimiterProperties();
         props.setCapacity(capacity);
         props.setLeakRate(leakRate);
-        return new RateLimiterService(props);
+        return new RateLimiterServiceImpl(props);
     }
 
     @Test
