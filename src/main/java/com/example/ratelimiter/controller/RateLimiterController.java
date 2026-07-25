@@ -10,6 +10,7 @@ import com.example.ratelimiter.service.RateLimiterService;
 import com.example.ratelimiter.util.TimeUtil;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class RateLimiterController {
 
-    private final RateLimiterService service;
-
-    public RateLimiterController(RateLimiterService service) {
-        this.service = service;
-    }
+    @Autowired
+    private RateLimiterService service;
 
     @PostMapping("/requests")
     public ResponseEntity<AllowResponseDto> checkRequest(@Valid @RequestBody AllowRequestDto request) {
