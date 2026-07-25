@@ -6,6 +6,15 @@ import com.example.ratelimiter.model.RateLimiter;
 
 import java.util.Map;
 
+/**
+ * Pure functional core of the leaky-bucket algorithm. Stateless static
+ * functions over immutable model records: create a limiter, evaluate a
+ * request, and read a bucket. No Spring or framework dependencies, so it is
+ * independently unit-testable.
+ *
+ * @author Andi Hermanto
+ * @since 2026-07-25
+ */
 public final class RateLimiterOps {
 
     private RateLimiterOps() {

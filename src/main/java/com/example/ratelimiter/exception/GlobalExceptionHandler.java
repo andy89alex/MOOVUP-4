@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
+/**
+ * @author Andi Hermanto
+ * @since 2026-07-25
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

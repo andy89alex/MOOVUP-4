@@ -10,6 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Default rate limiter service. Holds the single global limiter state in an
+ * {@link java.util.concurrent.atomic.AtomicReference} and swaps in the new
+ * immutable state returned by the pure {@code RateLimiterOps} functions on
+ * each request. Assumes single-threaded execution per the application spec.
+ *
+ * @author Andi Hermanto
+ * @since 2026-07-25
+ */
 @Service
 public class RateLimiterServiceImpl implements RateLimiterService {
 

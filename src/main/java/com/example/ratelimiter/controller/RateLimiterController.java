@@ -14,6 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller exposing the leaky-bucket rate limiter API.
+ * Provides an endpoint to check whether a request is allowed
+ * ({@code POST /requests}) and an endpoint to inspect a user's current
+ * bucket state ({@code GET /users/{userId}/bucket}). Delegates all
+ * algorithm work to the service layer.
+ *
+ * @author Andi Hermanto
+ * @since 2026-07-25
+ */
 @Slf4j
 @RestController
 public class RateLimiterController {
