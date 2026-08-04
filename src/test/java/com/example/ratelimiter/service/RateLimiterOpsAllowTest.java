@@ -19,6 +19,28 @@ class RateLimiterOpsAllowTest {
     }
 
     @Test
+    void basicFunctionalitySequenceFromSpec() {
+        // create_rate_limiter(capacity=5, leak_rate=1.0)
+        RateLimiter rl = RateLimiterOps.createRateLimiter(5, 1.0);
+
+        // [allowed1, limiter] = allow_request(limiter, "user1", timestamp=0)
+        AllowResult first = RateLimiterOps.allowRequest(rl, "user1", 0.0);
+        assertTrue(first.allowed());
+        assertEquals(new Bucket(1.0, 0.0), first.newState().buckets().get("user1"));
+
+        // [allowed2, limiter] = allow_request(limiter, "user1", timestamp=1)
+        // One second at leakRate 1.0 drains the single unit, so the level is
+        // back to 1.0 rather than accumulating to 2.0.
+        AllowResult second = RateLimiterOps.allowRequest(first.newState(), "user1", 1.0);
+        assertTrue(second.allowed());
+        assertEquals(new Bucket(1.0, 1.0), second.newState().buckets().get("user1"));
+
+        // Config carries through the returned states untouched.
+        assertEquals(5, second.newState().capacity());
+        assertEquals(1.0, second.newState().leakRate());
+    }
+
+    @Test
     void allowRequestDoesNotMutateInputLimiter() {
         RateLimiter rl = RateLimiterOps.createRateLimiter(5, 1.0);
         RateLimiterOps.allowRequest(rl, "user1", 0.0);
@@ -65,6 +87,22 @@ class RateLimiterOpsAllowTest {
         rl = RateLimiterOps.allowRequest(rl, "user1", 0.0).newState(); // user1 now full
         AllowResult u2 = RateLimiterOps.allowRequest(rl, "user2", 0.0);
         assertTrue(u2.allowed(), "user2 has its own empty bucket");
+    }
+
+    @Test
+    void usersTrackIndependentLevelsAndTimestamps() {
+        RateLimiter rl = RateLimiterOps.createRateLimiter(5, 1.0);
+        // user1 makes two requests at t=0 → level 2.0 (same timestamp, no leaking).
+        rl = RateLimiterOps.allowRequest(rl, "user1", 0.0).newState();
+        rl = RateLimiterOps.allowRequest(rl, "user1", 0.0).newState();
+        // user2's first request arrives much later at t=5.
+        rl = RateLimiterOps.allowRequest(rl, "user2", 5.0).newState();
+
+        // Each user keeps its own level and its own clock; user2's later
+        // timestamp must not leak user1's bucket.
+        assertEquals(new Bucket(2.0, 0.0), rl.buckets().get("user1"));
+        assertEquals(new Bucket(1.0, 5.0), rl.buckets().get("user2"));
+        assertEquals(2, rl.buckets().size());
     }
 
     @Test
